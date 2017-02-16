@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,7 +8,7 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
-public class P01MiPerfil extends JFrame {
+public class Proyecto01 extends JFrame {
 
 	//Definimos el panel y las cajas
 	private JPanel contentPane;
@@ -32,7 +31,7 @@ public class P01MiPerfil extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					P01MiPerfil frame = new P01MiPerfil();
+					Proyecto01 frame = new Proyecto01();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +43,7 @@ public class P01MiPerfil extends JFrame {
 	/**
 	 * Configuración de la ventana.
 	 */
-	public P01MiPerfil() {
+	public Proyecto01() {
 		setTitle("P01 Mi Perfil");
 		//Configuración de la Ventana
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
