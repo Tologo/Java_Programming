@@ -33,22 +33,7 @@ public class VentanaGeneral extends JFrame {
 	final static String VENTANAJ = "Ventana de juego";
 	final static String VENTANAP = "Ventana de perfil";
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaGeneral frame = new VentanaGeneral();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	
 	/**
 	 * Create the frame.
 	 */
@@ -72,7 +57,7 @@ public class VentanaGeneral extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				CardLayout cl = (CardLayout)(contentPane.getLayout());
 				cl.show(contentPane, VENTANAJ);
-				ventanaPerfil.setJugador(gamer);
+				ventanaJuego.setJugador(gamer);
 			}
 		});
 		

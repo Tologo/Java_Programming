@@ -40,7 +40,7 @@ public class Juego extends JPanel {
 	
 	private Random dado=new Random(); 
 	
-	// Almacenado de numeros aleatorios para realizar los cálculos
+	// Almacenado de números aleatorios para realizar los cálculos
 	
 	private int[] numAlmacenadosDado3=new int[3];
 	private int[] numAlmacenadosDado6=new int[2];
@@ -112,22 +112,27 @@ public class Juego extends JPanel {
 		
 		dado1 = new JLabel ("");
 		dado1.setBounds (10, 10, 150, 150);
+		dado1.addMouseListener(new ListenerDados());
 		add(dado1);
 
 		dado2 = new JLabel ("");
 		dado2.setBounds (160, 10, 150, 150);
+		dado2.addMouseListener(new ListenerDados());
 		add(dado2);
 
 		dado3 = new JLabel ("");
 		dado3.setBounds (310, 10, 150, 150);
+		dado3.addMouseListener(new ListenerDados());
 		add(dado3);
 
 		dado4 = new JLabel ("");
 		dado4.setBounds (10, 160, 150, 150);
+		dado4.addMouseListener(new ListenerDados());
 		add(dado4);
 
 		dado5 = new JLabel ("");
 		dado5.setBounds (160, 160, 150, 150);
+		dado5.addMouseListener(new ListenerDados());
 		add(dado5);
 
 		dado6 = new JLabel ("");
@@ -137,28 +142,13 @@ public class Juego extends JPanel {
 		// Configuramos los Botones de suma y resta
 		
 		btnSuma = new JButton("+");
-		btnSuma.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg) {
-				if(!tocaNumero){
-					cajaOperaciones.setText(cajaOperaciones.getText()+"+");
-					tocaNumero=true;
-				}
-			}
-		});
+		btnSuma.addMouseListener(new listenerSuma());
 		btnSuma.setFont(new Font("Arial Narrow", Font.PLAIN, 40));
 		btnSuma.setBounds(510, 78, 195, 63);
 		add(btnSuma);
 		
-		
 		btnResta = new JButton("-");
-		btnResta.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				if(!tocaNumero){
-					cajaOperaciones.setText(cajaOperaciones.getText()+"-");
-					tocaNumero=true;
-				}
-			}
-		});
+		btnResta.addMouseListener(new listenerResta());
 		btnResta.setFont(new Font("Arial Narrow", Font.PLAIN, 40));
 		btnResta.setBounds(779, 78, 195, 63);
 		add(btnResta);
@@ -173,42 +163,12 @@ public class Juego extends JPanel {
 		cajaOperaciones.setFont(new Font("Arial Narrow", Font.PLAIN, 20));
 		cajaOperaciones.setColumns(10); // Así limitamos la cantidad de caracteres a introducir
 		add(cajaOperaciones);
-		cajaOperaciones.setColumns(10);
 		
 		// Configuramos el botón para comprobar el resultado
 		
 		btnCompruebaResultado = new JButton("Comprueba tu operación...");
-		btnCompruebaResultado.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				
-				// Recoge los datos de la caja de operaciones y devuelve el resultado en el objeto operacion
-				ScriptEngineManager manager = new ScriptEngineManager(); 
-				ScriptEngine engine = manager.getEngineByName("js"); 
-				try {
-					operacion = engine.eval(cajaOperaciones.getText());
-				
-					if((numAlmacenadoDado12+1)==(Integer)operacion){
-						lblResultado.setText("Muy bien!"); //El resultado es correcto
-						//Desactivamos botón de comprobar el resultado y actualizamos la puntuación
-						btnCompruebaResultado.setEnabled(false);
-						gamer.setPuntuacion(gamer.getPuntuacion()+5);
-						lblPuntuacion.setText("Llevas: "+gamer.getPuntuacion()+" Puntos");
-						btnRepetir.setEnabled(true);//Habilitamos botón de reinicio
-					}else{
-						lblResultado.setText("Prueba otra vez...");//El resultado es incorrecto
-						//Actualiza los valores de la puntuación
-						gamer.setPuntuacion(gamer.getPuntuacion()-1);
-						lblPuntuacion.setText("Llevas: "+gamer.getPuntuacion()+" Puntos");
-						btnRepetir.setEnabled(true); //Habilitamos botón de reinicio
-						btnCompruebaResultado.setEnabled(false);						
-					}
-					
-				// Excepción por si no puede realizarse la operación que aparece en la caja de operaciones	
-				} catch (ScriptException e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
+		btnCompruebaResultado.addMouseListener(new listenerCompruebaResultado());
+		btnCompruebaResultado.setEnabled(true);
 		btnCompruebaResultado.setFont(new Font("Arial Narrow", Font.PLAIN, 30));
 		btnCompruebaResultado.setBounds(510, 235, 460, 60);
 		add(btnCompruebaResultado);
@@ -223,15 +183,7 @@ public class Juego extends JPanel {
 		// Configuramos el botón para reiniciar los valores
 		
 		btnRepetir = new JButton("Vuélvelo a intentar!");
-		btnRepetir.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent arg0) {
-				reiniciarValores();
-				// Al presionar invocamos al método reiniciarValores
-				btnCompruebaResultado.setEnabled(true);
-				btnRepetir.setEnabled(false);
-			}
-		});
-		btnCompruebaResultado.setEnabled(true);
+		btnRepetir.addMouseListener(new listenerRepetir());
 		btnRepetir.setEnabled(false);
 		btnRepetir.setFont(new Font("Arial Narrow", Font.PLAIN, 30));
 		btnRepetir.setBounds(510, 310, 460, 60);
@@ -250,7 +202,7 @@ public class Juego extends JPanel {
 		lblPuntuacion.setText("Tu puntuación es: "+gamer.getPuntuacion());
 	}
 	
-	// Método para resetear valores (se usa al iniciar el juego o reiniciarlo)
+	// Método para reiniciar valores (se usa al iniciar el juego o reiniciarlo)
 	
 	private void reiniciarValores(){
 		//Cargamos las imagenes en los arrays
@@ -275,10 +227,6 @@ public class Juego extends JPanel {
 		dado2.setName("2");
 		dado3.setIcon(dados3[numAlmacenadosDado3[2]]); 
 		dado3.setName("3");
-		// Creamos los Listeners para estos dados
-		dado1.addMouseListener(new ListenerDados());
-		dado2.addMouseListener(new ListenerDados());
-		dado3.addMouseListener(new ListenerDados());
 		
 		//Colocamos los dados de 6 caras
 		
@@ -287,9 +235,6 @@ public class Juego extends JPanel {
 		dado4.setName("4");
 		dado5.setIcon(dados6[numAlmacenadosDado6[1]]); 
 		dado5.setName("5");
-		// Creamos los Listeners para estos dados
-		dado4.addMouseListener(new ListenerDados());
-		dado5.addMouseListener(new ListenerDados());
 		
 		//Colocamos el dado de 12 caras
 		
@@ -307,21 +252,23 @@ public class Juego extends JPanel {
 		
 		tocaNumero=true;
 		operacion=null;
+		
 	}
 
 	//Final del método de reiniciar
 	
 	
 	
-	//Implementamos el mouse-listener a través de un Inner class
+	// Implementamos el mouse-listener necesario para la acción realizada por los 
+	// dados al ser presionados, a través de un Inner class
 		
 		private class ListenerDados implements MouseListener{
 			
 		@Override
-		public void mousePressed(MouseEvent e) {
+		public void mousePressed(MouseEvent arg0) {
 
 	  //Identificamos el dado que hemos seleccionado
-		JLabel dado = (JLabel) e.getSource();
+		JLabel dado = (JLabel) arg0.getSource();
 
 		//Recuperamos el nombre del label para tomar el valor del array
 
@@ -334,6 +281,9 @@ public class Juego extends JPanel {
 
 		 if(tocaNumero){
 			 
+			 dado.removeMouseListener(this);
+			 dado.setEnabled(false);
+			 
 			 switch (numeroDado){
 				case 1: cajaOperaciones.setText( cajaOperaciones.getText() + String.valueOf(numAlmacenadosDado3[0]+1) ); break;
 				case 2: cajaOperaciones.setText( cajaOperaciones.getText() + String.valueOf(numAlmacenadosDado3[1]+1) ); break;
@@ -344,34 +294,184 @@ public class Juego extends JPanel {
 			 
 			 // Pasamos la imagen del dado a gris para no volverlo a utilizar
 			 
-			 dado.setIcon(dadogris);
+			 dado.setIcon(dadogris);			 
 			 
-			 //”Apagamos el listener” para el dado escogido dado
-			 
-			 dado.removeMouseListener(this);
-		     
-		     //Cambiemos el valor del "semáforo" para que se introduzca un operador
+		     // Cambiamos el valor del "semáforo" para que se introduzca un operador
 			 
 			 tocaNumero=false;
           
-		                  }
+		                 }
 		}
-		//ListenerDados al implementar MouseListener debe también implementar los siguientes casos
-		//Aunque no hagan nada
+		//Métodos necesarios en la InnerClass aunque no hagan nada
 		
 		@Override
-		public void mouseEntered(MouseEvent e) {}
+		public void mouseEntered(MouseEvent arg0) {}
 
 		@Override
-		public void mouseExited(MouseEvent e) {}
+		public void mouseExited(MouseEvent arg0) {}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {}
+		public void mouseClicked(MouseEvent arg0) {}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {} 
+		public void mouseReleased(MouseEvent arg0) {} 
 		
-		} // Aquí termina la inner class
+		} // Aquí termina la inner class de los dados
+		
+		
+		// Inner Class para el botón Suma
+		
+		private class listenerSuma implements MouseListener {
+			//Formato que tiene que aparecer en una inner class de un mouseListener
+			@Override
+			public void mouseClicked(MouseEvent arg0) {}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+			//MousseListener que vamos a utilizar
+			@Override
+			public void mousePressed(MouseEvent e) {
+					if(!tocaNumero){
+						cajaOperaciones.setText(cajaOperaciones.getText()+"+");
+						tocaNumero=true;
+					}
+				}
+		}
+		
+		// Inner Class para el botón Resta
+				private class listenerResta implements MouseListener {
+					//Formato que tiene que aparecer en una inner class de un mouseListener
+					@Override
+					public void mouseClicked(MouseEvent arg0) {}
+					@Override
+					public void mouseEntered(MouseEvent arg0) {}
+					@Override
+					public void mouseExited(MouseEvent arg0) {}
+					@Override
+					public void mouseReleased(MouseEvent arg0) {}
+					//MousseListener que vamos a utilizar
+					@Override
+					public void mousePressed(MouseEvent e) {
+						if(!tocaNumero){
+							cajaOperaciones.setText(cajaOperaciones.getText()+"-");
+							tocaNumero=true;
+						}
+					}
+				}
+				
+		// Inner Class para el botón compruebaResultado
+				private class listenerCompruebaResultado implements MouseListener {
+					//Formato que tiene que aparecer en una inner class de un mouseListener
+					@Override
+					public void mouseClicked(MouseEvent arg0) {}
+					@Override
+					public void mouseEntered(MouseEvent arg0) {}
+					@Override
+					public void mouseExited(MouseEvent arg0) {}
+					@Override
+					public void mouseReleased(MouseEvent arg0) {}
+					//MousseListener que vamos a utilizar
+					@Override
+					public void mousePressed(MouseEvent e) {
+						dado1.removeMouseListener(this);
+						dado2.removeMouseListener(this);
+						dado3.removeMouseListener(this);
+						dado4.removeMouseListener(this);
+						dado5.removeMouseListener(this);					
+						// Recoge los datos de la caja de operaciones y devuelve el resultado en el objeto operacion
+						ScriptEngineManager manager = new ScriptEngineManager(); 
+						ScriptEngine engine = manager.getEngineByName("js"); 
+						try {
+							operacion = engine.eval(cajaOperaciones.getText());
+							
+							if((numAlmacenadoDado12+1)==(Integer)operacion){
+								lblResultado.setText("Muy bien!"); //El resultado es correcto
+								// Actualizamos la puntuación
+								gamer.setPuntuacion(gamer.getPuntuacion()+5);
+								lblPuntuacion.setText("Llevas: "+gamer.getPuntuacion()+" Puntos");
+								btnRepetir.setEnabled(true);//Habilitamos botón de reinicio
+							}else{
+								lblResultado.setText("Prueba otra vez...");//El resultado es incorrecto
+								// Actualiza los valores de la puntuación
+								gamer.setPuntuacion(gamer.getPuntuacion()-1);
+								lblPuntuacion.setText("Llevas: "+gamer.getPuntuacion()+" Puntos");
+								btnRepetir.setEnabled(true); //Habilitamos botón de reinicio						
+							}
+								
+						// Excepción por si no puede realizarse la operación que aparece en la caja de operaciones	
+						} catch (ScriptException e1) {
+							e1.printStackTrace();
+						}
+						// Desactivamos el botón
+						btnCompruebaResultado.setEnabled(false);
+					}
+				}
+				
+			// Inner Class para el botón Reset
+				
+				private class listenerRepetir implements MouseListener {
+					//Formato que tiene que aparecer en una inner class de un mouseListener
+					@Override
+					public void mouseClicked(MouseEvent arg0) {}
+					@Override
+					public void mouseEntered(MouseEvent arg0) {}
+					@Override
+					public void mouseExited(MouseEvent arg0) {}
+					@Override
+					public void mouseReleased(MouseEvent arg0) {}
+					//MousseListener que vamos a utilizar
+					@Override
+					public void mousePressed(MouseEvent e) {
+							reiniciarValores();
+							// Al presionar invocamos al método reiniciarValores
+							btnCompruebaResultado.setEnabled(true);
+							btnRepetir.setEnabled(false);
+							// Comprobacción de listeners en los dados
+							estaActivo();
+					}
+				}	
+				
+		//MÉTODO PARA SABER SI HEMOS DADO AL ACTION LISTENER Y DE ESTA FORMA QUE HAGA DE SÉMAFORO A LA HORA DE ACTIVAR LOS MOUSELISTENER
+			private void estaActivo (){
+				
+				if (dado1.isEnabled()){
+					//NO HACE NADA 
+				}else{
+					dado1.addMouseListener(new ListenerDados());
+					dado1.setEnabled(true);
+				}
+				
+				if (dado2.isEnabled()){
+					//NO HACE NADA
+				}else{
+					dado2.addMouseListener(new ListenerDados());
+					dado2.setEnabled(true);
+				}
+				
+				if (dado3.isEnabled()){
+					//NO HACE NADA
+				}else{
+					dado3.addMouseListener(new ListenerDados());
+					dado3.setEnabled(true);
+				}	
+				
+				if (dado4.isEnabled()){
+					//NO HACE NADA
+				}else{
+					dado4.addMouseListener(new ListenerDados());
+					dado4.setEnabled(true);
+				}
+				
+				if (dado5.isEnabled()){
+					//NO HACE NADA
+				}else{
+					dado5.addMouseListener(new ListenerDados());
+					dado5.setEnabled(true);
+				}
+			}
 		
 } //Aquí termina la clase Juego
 	

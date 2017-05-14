@@ -1,45 +1,59 @@
 package Ventanas;
 
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import java.awt.FlowLayout;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
+
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.Component;
+import java.awt.Color;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 import Modelo.Jugador;
-
-import java.awt.Component;
-import java.awt.Color;
 
 public class Perfil extends JPanel {
 	
 	// Variables de la clase
 	
 	// Cajas de texto para los datos del Jugador
+	
 	private JTextField textFieldApellidos;
 	private JTextField textFieldNombre;
 	private JTextField textFieldNick;
 	private JTextField textFieldEdad;
 	private JTextField textFieldPuntuacion;
+	private JTextArea textComentarios;
 	
 	// Clase que almacena al jugador
+	
 	private Jugador gamer;
 	
 	// Etiquetas
+	
 	private JLabel lblPuntuacion;
 	private JLabel lblCabecera;
+	private JLabel lblNombre;
+	private JLabel lblApellidos;
+	private JLabel lblNick;
+	private JLabel lblEdad;
+	private JLabel lblComentarios;
+	
+	// Botón para actualizar los datos
+	
+	private JButton btnActualizarDatos;
 
 	/**
 	 * Constructor.
 	 */
 	public Perfil() {
+		
 		setBackground(SystemColor.activeCaption);
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT, 20, 20);
 		setLayout(flowLayout);
@@ -108,25 +122,24 @@ public class Perfil extends JPanel {
 		
 		// Botón de actualizar
 		JButton btnActualizarDatos = new JButton("Actualizar datos");
-		btnActualizarDatos.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Almaceno los nuevos datos del jugador
-				gamer.setNombre(textFieldNombre.getText());
-				gamer.setApellidos(textFieldApellidos.getText());
-				gamer.setNick(textFieldNick.getText());
-				int nuevaEdad = Integer.valueOf(textFieldEdad.getText());
-				gamer.setEdad(nuevaEdad);
-
-				// Actualiza nombre en el juego (No funciona!)
-				// Juego.setJugador(gamer.getNick());
-				}
-		});
+		btnActualizarDatos.addMouseListener(new listenerActualizarDatos());
 		btnActualizarDatos.setBounds(97, 231, 146, 29);
 		add(btnActualizarDatos);
+		
+		JLabel lblComentarios = new JLabel("Comentarios");
+		lblComentarios.setForeground(Color.BLUE);
+		lblComentarios.setFont(new Font("Arial Narrow", Font.PLAIN, 20));
+		add(lblComentarios);
+		
+		textComentarios = new JTextArea();
+		textComentarios.setForeground(Color.DARK_GRAY);
+		textComentarios.setFont(new Font("Arial Narrow", Font.PLAIN, 20));
+		add(textComentarios);
+		textComentarios.setColumns(26);
 
 	} // Final del constructor!
 
-		// Setter del jugador en los jTextfields
+// Setter del jugador en los jTextfields
 		
 		public void setJugador (Jugador gamer){
 			this.gamer=gamer;
@@ -134,11 +147,31 @@ public class Perfil extends JPanel {
 			textFieldApellidos.setText(gamer.getApellidos());
 			textFieldNick.setText(gamer.getNick());
 			textFieldEdad.setText(String.valueOf(gamer.getEdad()));
-			textFieldPuntuacion.setText(String.valueOf(gamer.getPuntuacion()));;
-			
+			textFieldPuntuacion.setText(String.valueOf(gamer.getPuntuacion()));	
 		}
-		public void setPuntosText (int puntos){
-			textFieldPuntuacion.setText(String.valueOf(gamer.getPuntuacion()));
-		}
+		
+// InnerClass del botón para actualizar datos
+		private class listenerActualizarDatos implements MouseListener {
+			//Formato que tiene que aparecer en una inner class de un mouseListener
+			@Override
+			public void mouseClicked(MouseEvent arg0) {}
+			@Override
+			public void mouseEntered(MouseEvent arg0) {}
+			@Override
+			public void mouseExited(MouseEvent arg0) {}
+			@Override
+			public void mouseReleased(MouseEvent arg0) {}
+			//MousseListener que vamos a utilizar
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// Almaceno los nuevos datos del jugador
+				gamer.setNombre(textFieldNombre.getText());
+				gamer.setApellidos(textFieldApellidos.getText());
+				gamer.setNick(textFieldNick.getText());
+				int nuevaEdad = Integer.valueOf(textFieldEdad.getText());
+				gamer.setEdad(nuevaEdad);
+				textComentarios.setText("Cambios guardados con éxito para el jugador "+gamer.getNombre()+" "+gamer.getApellidos()+" con Nick "+gamer.getNick()+" de "+gamer.getEdad()+" años.");
+				} 
+			}
 		
 }

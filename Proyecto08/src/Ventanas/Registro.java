@@ -3,17 +3,16 @@ package Ventanas;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import Modelo.ConexionDB;
 import Modelo.Jugador;
 import Modelo.JugadorDB;
 
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JTextField;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
 import java.sql.Connection;
@@ -134,7 +133,8 @@ public class Registro extends JFrame {
 		
 	// Conectamos con la BBDD
 		
-		Conectar();	
+	Conectar();
+			
 
 	// Creamos la ventana de Juego
 				
@@ -164,10 +164,9 @@ public class Registro extends JFrame {
 				}
 			catch(Exception e)
 			{
-				System.out.println( " Debe haber algún problema con la BBDD o con la conexión.");	
+				System.out.println( "Debe haber algún problema con la BBDD o con la conexión.");	
 			}
-		}
-		
+		}	
 
 	// Implementamos una InnerClass para las acciones a realizar con el botón 'btnComprobar'
 	
