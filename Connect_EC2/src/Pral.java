@@ -13,9 +13,9 @@ public class Pral {
 
 		Connection conexion;
 		
-		String url = "jdbc:mysql://54.191.88.228:3306/Sistemas";
-		String user = "invitado";
-		String pw = "invitado1";
+		String url = "jdbc:mysql://mydatabase.c2fqi4n8yu5q.us-west-2.rds.amazonaws.com";
+		String user = "admin";
+		String pw = "11vlado22";
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");

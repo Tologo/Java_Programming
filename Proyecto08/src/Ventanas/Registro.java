@@ -148,7 +148,7 @@ public class Registro extends JFrame {
 	// Método para Conectar con la base de datos
 		private void Conectar(){
 			try{
-				db=new ConexionDB("localhost","mathdice","root","");
+				db=new ConexionDB("localhost","usuarios","root","");
 				//Establecemos la conexion
 				connected=db.connectDB();
 				//Asignamos con el getter la conexion establecida
